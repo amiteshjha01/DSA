@@ -1,0 +1,59 @@
+#include <iostream>
+
+class InsertionSort {
+private:
+    int *arr;
+    int size;
+
+public:
+    InsertionSort(int n) {
+        size = n;
+        arr = new int[size];
+    }
+
+    void inputArray() {
+        std::cout << "Enter " << size << " elements:" << std::endl;
+        for (int i = 0; i < size; ++i) {
+            std::cin >> arr[i];
+        }
+    }
+
+    void sort() {
+        int key, j;
+        for (int i = 1; i < size; ++i) {
+            key = arr[i];
+            j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j = j - 1;
+            }
+            arr[j + 1] = key;
+        }
+    }
+
+    void displaySortedArray() {
+        std::cout << "Sorted Array: ";
+        for (int i = 0; i < size; ++i) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    ~InsertionSort() {
+        delete[] arr;
+    }
+};
+
+int main() {
+    int n;
+    std::cout << "Enter the size of  the array: ";
+    std::cin >> n;
+
+    InsertionSort sorter(n);
+    sorter.inputArray();
+    sorter.sort();
+    sorter.displaySortedArray();
+
+    return 0;
+}

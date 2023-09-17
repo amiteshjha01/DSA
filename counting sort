@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+
+void countingSort(int input_array[], int s, int r)
+{
+    int output_array[s];
+    int count_array[r];
+    
+    for (int i = 0; i < r; i++)
+    {
+        count_array[i] = 0;
+    }
+    
+    for (int i = 0; i < s; i++)
+    {
+        ++count_array[input_array[i]];
+    }
+    
+    for (int i = 1; i < r; i++)
+    {
+        count_array[i] += count_array[i - 1];
+    }
+    
+    for (int i = s - 1; i >= 0; i--)
+    {
+        output_array[--count_array[input_array[i]]] = input_array[i];
+    }
+    
+    for (int i = 0; i < s; i++)
+    {
+        input_array[i] = output_array[i];
+    }
+}
+
+int main()
+{
+    int size = 0;
+    int range = 21; // Adjusted the range to include elements up to 20
+    
+    cout << "enter the size of the array:";
+    cin >> size;
+    
+    int a[size];
+    
+    cout << "enter the elements of the array :";
+    for (int i = 0; i < size; i++)
+    {
+        cin >> a[i];
+    }
+    
+    cout << "current array is :";
+    for (int i = 0; i < size; i++)
+    {
+        cout << " " << a[i];
+    }
+    cout << endl;
+    
+    countingSort(a, size, range);
+    
+    cout << "sorted array is :";
+    for (int i = 0; i < size; i++)
+    {
+        cout << " " << a[i];
+    }
+    
+    return 0;
+}

@@ -1,0 +1,73 @@
+#include<iostream>
+using namespace std;
+
+void merge(int arr[], int l, int m, int r) {
+    int i = l;
+    int j = m + 1;
+    int k = l;
+
+    int temp[20];
+
+    while (i <= m && j <= r) {
+        if (arr[i] <= arr[j]) {
+            temp[k] = arr[i];
+            i++;
+        }
+        else {
+            temp[k] = arr[j];
+            j++;
+        }
+        k++;
+    }
+    while (i <= m) {
+        temp[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while (j <= r) {
+        temp[k] = arr[j];
+        j++;
+        k++;
+    }
+    for (int s = l; s <= r; s++) {
+        arr[s] = temp[s];
+    }
+    
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        
+        merge(arr, l, m, r);
+    }
+}
+
+int main() {
+    int a[20], size, i;
+
+    cout << "Enter the size of array: ";
+    cin >> size;
+
+    cout << "Enter the elements of the array: ";
+    for (i = 0; i < size; i++) {
+        cin >> a[i];
+    }
+    cout << "Current array is: ";
+    for (i = 0; i < size; i++) {
+        cout << " " << a[i];
+    }
+    cout << endl;
+
+    mergeSort(a, 0, size - 1);
+
+    cout << "The sorted array is:";
+    for (i = 0; i < size; i++) {
+        cout << " " << a[i];
+    }
+
+    return 0;
+}

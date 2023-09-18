@@ -1,0 +1,28 @@
+// question is : You are given an integrr 'NUM' . Your task is to find out whether this number is an Armstrong number or not. A k-digit number 'NUM' is an Armstrong number if and only if the k th power of each digits sums to 'NUM'. 
+// solution is below:
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isArmstrong(int num) {
+    int originalNum = num;
+    int n = 0;
+    int result = 0;
+
+    // Count the number of digits
+    while (num != 0) {
+        num /= 10;
+        ++n;
+    }
+
+    num = originalNum;
+
+    // Calculate the sum of nth powers of individual digits
+    while (num != 0) {
+        int digit = num % 10;
+        result += pow(digit, n);
+        num /= 10;
+    }
+
+    // Check if it's an Armstrong number
+    return (result == originalNum);
+}

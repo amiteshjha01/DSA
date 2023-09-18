@@ -1,0 +1,37 @@
+// Question is :
+// You are given a string 'str'. Find the longest prefix in the string, which is also a suffix of the string, excluding the string itself. If there is no such string, return an empty string "'.
+
+// solution is :
+#include <iostream>
+#include <string>
+
+std::string longestPrefixSuffix(const std::string &str) {
+    int n = str.length();
+    std::string result = "";
+
+    for (int len = 1; len < n; len++) {
+        if (str.substr(0, len) == str.substr(n - len, len)) {
+            result = str.substr(0, len);
+        }
+    }
+
+    return result;
+}
+
+// main function
+
+int main() {
+    std::string input;
+    std::cout << "Enter a string: ";
+    std::cin >> input;
+
+    std::string prefixSuffix = longestPrefixSuffix(input);
+
+    if (prefixSuffix.empty()) {
+        std::cout << "No such prefix-suffix found." << std::endl;
+    } else {
+        std::cout << "Longest prefix-suffix: " << prefixSuffix << std::endl;
+    }
+
+    return 0;
+}

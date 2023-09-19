@@ -1,0 +1,38 @@
+// Question is : Ninja is shifting to a new place named NinjaGram. To take admission to the new school, the teacher gives him a sentence and asks him to check whether the sentence is a pangram. A word or a sentence is called a pangram if it contains all the English alphabet letters. Since Ninja is new to programming, he doesn't have much experience. He asks you to solve the problem. Can you help Ninja figure out whether the sentence is a pangram?
+
+
+#include <iostream>
+#include <string>
+#include <unordered_set>
+
+bool ninjaGram(const std::string &str) {
+    // Create an unordered set to store unique alphabet letters
+    std::unordered_set<char> letters;
+
+    // Iterate through the sentence
+    for (char c : str) {
+        // Convert the character to lowercase if it's an uppercase letter
+        if (std::isalpha(c)) {
+            char lowercase_c = std::tolower(c);
+            // Insert the lowercase letter into the set
+            letters.insert(lowercase_c);
+        }
+    }
+
+    // Check if the size of the set is 26 (all English alphabet letters)
+    return letters.size() == 26;
+}
+
+int main() {
+    std::string sentence;
+    std::cout << "Enter a sentence: ";
+    std::getline(std::cin, sentence);
+
+    if (ninjaGram(sentence)) {
+        std::cout << "The sentence is a pangram." << std::endl;
+    } else {
+        std::cout << "The sentence is not a pangram." << std::endl;
+    }
+
+    return 0;
+}

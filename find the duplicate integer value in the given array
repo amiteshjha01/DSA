@@ -1,0 +1,19 @@
+int findDuplicate(vector<int> &arr) {
+    int tortoise = arr[0];
+    int hare = arr[0];
+
+    // Phase 1: Find the intersection point in the cycle
+    do {
+        tortoise = arr[tortoise];
+        hare = arr[arr[hare]];
+    } while (tortoise != hare);
+
+    // Phase 2: Find the entrance to the cycle
+    tortoise = arr[0];
+    while (tortoise != hare) {
+        tortoise = arr[tortoise];
+        hare = arr[hare];
+    }
+
+    return hare;
+}

@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+char findNonRepeating(string str) {
+    unordered_map<char, int> charCount;
+
+    // Count the frequency of each character in the string
+    for (char c : str) {
+        charCount[c]++;
+    }
+
+    // Iterate through the string again to find the first non-repeating character
+    for (char c : str) {
+        if (charCount[c] == 1) {
+            return c; // Found the first non-repeating character
+        }
+    }
+
+    return '#'; // No non-repeating character found
+}
+
+int main() {
+    string str = "your_input_string_here";
+    char result = findNonRepeating(str);
+
+    if (result != '#') {
+        cout << "First non-repeating character: " << result << endl;
+    } else {
+        cout << "No non-repeating character found." << endl;
+    }
+
+    return 0;
+}

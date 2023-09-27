@@ -1,0 +1,99 @@
+#include <iostream>
+#include <vector>
+
+class RadixSort {
+private:
+    int* arr;
+    int size;
+    int getMax();
+    void countSort(int exp);
+
+public:
+    RadixSort(int size);
+    ~RadixSort();
+    void inputArray();
+    void radixSort();
+    void display();
+};
+
+RadixSort::RadixSort(int size) {
+    this->size = size;
+    arr = new int[size];
+}
+
+RadixSort::~RadixSort() {
+    delete[] arr;
+}
+
+void RadixSort::inputArray() {
+    std::cout << "Enter " << size << " elements:" << std::endl;
+    for (int i = 0; i < size; i++) {
+        std::cin >> arr[i];
+    }
+}
+
+int RadixSort::getMax() {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+void RadixSort::countSort(int exp) {
+    const int radix = 10; // Base 10 for decimal numbers
+    std::vector<int> output(size);
+    int count[radix] = {0};
+
+    // Count the occurrences of each digit in the current place value
+    for (int i = 0; i < size; i++) {
+        count[(arr[i] / exp) % radix]++;
+    }
+
+    // Calculate the cumulative count of each digit
+    for (int i = 1; i < radix; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // Build the output array using the cumulative count
+    for (int i = size - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % radix] - 1] = arr[i];
+        count[(arr[i] / exp) % radix]--;
+    }
+
+    // Copy the sorted elements back to the original array
+    for (int i = 0; i < size; i++) {
+        arr[i] = output[i];
+    }
+}
+
+void RadixSort::radixSort() {
+    int max = getMax();
+
+    for (int exp = 1; max / exp > 0; exp *= 10) {
+        countSort(exp);
+    }
+}
+
+void RadixSort::display() {
+    std::cout << "Sorted Array: ";
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int size;
+    std::cout << "Enter the size of the array: ";
+    std::cin >> size;
+
+    RadixSort radixSortObj(size);
+    radixSortObj.inputArray();
+    radixSortObj.radixSort();
+    radixSortObj.display();
+
+    return 0;
+}

@@ -1,0 +1,63 @@
+#include <iostream>
+
+class SelectionSort {
+private:
+    int* arr;
+    int size;
+
+public:
+    SelectionSort(int size) {
+        this->size = size;
+        arr = new int[size];
+    }
+
+    ~SelectionSort() {
+        delete[] arr;
+    }
+
+    void inputArray() {
+        std::cout << "Enter " << size << " elements:" << std::endl;
+        for (int i = 0; i < size; i++) {
+            std::cin >> arr[i];
+        }
+    }
+
+    void selectionSort() {
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+
+            // Find the index of the minimum element in the unsorted part of the array
+            for (int j = i + 1; j < size; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+
+            // Swap the minimum element with the first element of the unsorted part
+            if (minIndex != i) {
+                std::swap(arr[i], arr[minIndex]);
+            }
+        }
+    }
+
+    void display() {
+        std::cout << "Sorted Array: ";
+        for (int i = 0; i < size; i++) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    int size;
+    std::cout << "Enter the size of the array: ";
+    std::cin >> size;
+
+    SelectionSort selectionSortObj(size);
+    selectionSortObj.inputArray();
+    selectionSortObj.selectionSort();
+    selectionSortObj.display();
+
+    return 0;
+}

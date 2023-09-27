@@ -1,0 +1,65 @@
+#include <iostream>
+
+class BubbleSort {
+private:
+    int* arr;
+    int size;
+
+public:
+    BubbleSort(int size) {
+        this->size = size;
+        arr = new int[size];
+    }
+
+    ~BubbleSort() {
+        delete[] arr;
+    }
+
+    void inputArray() {
+        std::cout << "Enter " << size << " elements:" << std::endl;
+        for (int i = 0; i < size; i++) {
+            std::cin >> arr[i];
+        }
+    }
+
+    void bubbleSort() {
+        for (int i = 0; i < size - 1; i++) {
+            // Flag to optimize the algorithm by checking if any swaps are made
+            bool swapped = false;
+
+            for (int j = 0; j < size - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // Swap arr[j] and arr[j + 1]
+                    std::swap(arr[j], arr[j + 1]);
+                    swapped = true;
+                }
+            }
+
+            // If no two elements were swapped in inner loop, the array is already sorted
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+
+    void display() {
+        std::cout << "Sorted Array: ";
+        for (int i = 0; i < size; i++) {
+            std::cout << arr[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    int size;
+    std::cout << "Enter the size of the array: ";
+    std::cin >> size;
+
+    BubbleSort bubbleSortObj(size);
+    bubbleSortObj.inputArray();
+    bubbleSortObj.bubbleSort();
+    bubbleSortObj.display();
+
+    return 0;
+}

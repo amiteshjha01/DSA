@@ -1,0 +1,69 @@
+#include <iostream>
+#include <climits>
+
+class MatrixChainMultiplication {
+private:
+    int* dimensions;
+    int numMatrices;
+    int** dp;
+
+    int minMultiplications(int i, int j) {
+        if (i == j)
+            return 0;
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int minCost = INT_MAX;
+        for (int k = i; k < j; k++) {
+            int cost = minMultiplications(i, k) + minMultiplications(k + 1, j) + dimensions[i - 1] * dimensions[k] * dimensions[j];
+            if (cost < minCost)
+                minCost = cost;
+        }
+        return dp[i][j] = minCost;
+    }
+
+public:
+    MatrixChainMultiplication(int* p, int n) {
+        dimensions = p;
+        numMatrices = n;
+        dp = new int*[numMatrices];
+        for (int i = 0; i < numMatrices; i++) {
+            dp[i] = new int[numMatrices];
+            for (int j = 0; j < numMatrices; j++) {
+                dp[i][j] = -1;
+            }
+        }
+    }
+
+    ~MatrixChainMultiplication() {
+        for (int i = 0; i < numMatrices; i++) {
+            delete[] dp[i];
+        }
+        delete[] dp;
+    }
+
+    int findMinMultiplications() {
+        return minMultiplications(1, numMatrices - 1);
+    }
+};
+
+int main() {
+    int n;
+    std::cout << "Enter the number of matrices: ";
+    std::cin >> n;
+
+    int* dimensions = new int[n + 1];
+    std::cout << "Enter the dimensions of matrices: ";
+    for (int i = 0; i <= n; i++) {
+        std::cin >> dimensions[i];
+    }
+
+    MatrixChainMultiplication chain(dimensions, n + 1);
+
+    int minMultiplications = chain.findMinMultiplications();
+
+    std::cout << "Minimum number of multiplications is " << minMultiplications << std::endl;
+
+    delete[] dimensions;
+    return 0;
+}

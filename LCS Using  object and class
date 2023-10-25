@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cstring>
+
+class LCS {
+private:
+    char* S1;
+    char* S2;
+    int m, n;
+
+public:
+    LCS(char* str1, char* str2) {
+        m = std::strlen(str1);
+        n = std::strlen(str2);
+        S1 = new char[m + 1];
+        S2 = new char[n + 1];
+        std::strcpy(S1, str1);
+        std::strcpy(S2, str2);
+    }
+
+    ~LCS() {
+        delete[] S1;
+        delete[] S2;
+    }
+
+    int lcsLength(int i, int j) {
+        if (i == 0 || j == 0)
+            return 0;
+        else if (S1[i - 1] == S2[j - 1])
+            return lcsLength(i - 1, j - 1) + 1;
+        else
+            return std::max(lcsLength(i - 1, j), lcsLength(i, j - 1));
+    }
+
+    void printLCS() {
+        int lcsLen = lcsLength(m, n);
+        char lcsAlgo[lcsLen + 1];
+        lcsAlgo[lcsLen] = '\0';
+
+        int i = m, j = n, index = lcsLen;
+        while (i > 0 && j > 0) {
+            if (S1[i - 1] == S2[j - 1]) {
+                lcsAlgo[index - 1] = S1[i - 1];
+                i--;
+                j--;
+                index--;
+            } else if (lcsLength(i - 1, j) > lcsLength(i, j - 1))
+                i--;
+            else
+                j--;
+        }
+
+        std::cout << "S1 : " << S1 << "\nS2 : " << S2 << "\nLCS: " << lcsAlgo << "\n";
+    }
+};
+
+int main() {
+    char S1[] = "ACADB";
+    char S2[] = "CBDA";
+
+    LCS lcsObj(S1, S2);
+    lcsObj.printLCS();
+
+    return 0;
+}

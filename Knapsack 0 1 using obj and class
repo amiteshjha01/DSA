@@ -1,0 +1,70 @@
+#include <iostream>
+#include <algorithm>
+
+class Knapsack {
+public:
+    Knapsack(int W, int n) : capacity(W), numItems(n) {
+        values = new int[numItems];
+        weights = new int[numItems];
+    }
+
+    void initialize() {
+        std::cout << "Enter the values for the items: ";
+        for (int i = 0; i < numItems; ++i) {
+            std::cin >> values[i];
+        }
+
+        std::cout << "Enter the weights for the items: ";
+        for (int i = 0; i < numItems; ++i) {
+            std::cin >> weights[i];
+        }
+    }
+
+    int solve() {
+        int dp[numItems + 1][capacity + 1];
+
+        for (int i = 0; i <= numItems; ++i) {
+            for (int w = 0; w <= capacity; ++w) {
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0;
+                } else if (weights[i - 1] <= w) {
+                    dp[i][w] = std::max(values[i - 1] + dp[i - 1][w - weights[i - 1]], dp[i - 1][w]);
+                } else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+
+        return dp[numItems][capacity];
+    }
+
+    ~Knapsack() {
+        delete[] values;
+        delete[] weights;
+    }
+
+private:
+    int* values;
+    int* weights;
+    int capacity;
+    int numItems;
+};
+
+int main() {
+    int n;
+    std::cout << "Enter the number of items: ";
+    std::cin >> n;
+
+    int W;
+    std::cout << "Enter the knapsack capacity: ";
+    std::cin >> W;
+
+    Knapsack knapsack(W, n);
+    knapsack.initialize();
+
+    int maxValue = knapsack.solve();
+
+    std::cout << "Maximum value: " << maxValue << std::endl;
+
+    return 0;
+}

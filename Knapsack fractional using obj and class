@@ -1,0 +1,85 @@
+#include <iostream>
+#include <algorithm>
+
+class Item {
+public:
+    int profit;
+    int weight;
+
+    Item() : profit(0), weight(0) {} // Default constructor
+
+    Item(int profit, int weight) : profit(profit), weight(weight) {}
+
+    double getValuePerWeight() const {
+        return static_cast<double>(profit) / weight;
+    }
+};
+
+bool compareItems(const Item& a, const Item& b) {
+    return a.getValuePerWeight() > b.getValuePerWeight();
+}
+
+class FractionalKnapsack {
+public:
+    FractionalKnapsack(int capacity, int numItems) : capacity(capacity), numItems(numItems) {
+        items = new Item[numItems];
+    }
+
+    void addItem(int index, int profit, int weight) {
+        items[index] = Item(profit, weight);
+    }
+
+    double solve() {
+        std::sort(items, items + numItems, compareItems);
+
+        double finalValue = 0.0;
+        int currentWeight = 0;
+
+        for (int i = 0; i < numItems; ++i) {
+            if (currentWeight + items[i].weight <= capacity) {
+                currentWeight += items[i].weight;
+                finalValue += items[i].profit;
+            } else {
+                double remainingCapacity = capacity - currentWeight;
+                finalValue += items[i].getValuePerWeight() * remainingCapacity;
+                break;
+            }
+        }
+
+        return finalValue;
+    }
+
+    ~FractionalKnapsack() {
+        delete[] items;
+    }
+
+private:
+    int capacity;
+    int numItems;
+    Item* items;
+};
+
+int main() {
+    int n;
+    std::cout << "Enter the number of items: ";
+    std::cin >> n;
+
+    int capacity;
+    std::cout << "Enter the knapsack capacity: ";
+    std::cin >> capacity;
+
+    FractionalKnapsack knapsack(capacity, n);
+
+    for (int i = 0; i < n; ++i) {
+        int profit, weight;
+        std::cout << "Enter profit and weight for item " << i + 1 << ": ";
+        std::cin >> profit >> weight;
+        knapsack.addItem(i, profit, weight);
+    }
+
+    double maxValue = knapsack.solve();
+
+    std::cout << "Maximum value in the knapsack: " << maxValue << std::endl;
+
+    return 0;
+}

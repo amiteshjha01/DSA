@@ -1,0 +1,106 @@
+#include <iostream>
+#include <list>
+#include <queue>
+
+class Graph {
+private:
+    int V;
+    int** adj;
+
+public:
+    Graph(int vertices);
+    ~Graph();
+    void addEdge(int v, int w);
+    void BFS(int s);
+};
+
+Graph::Graph(int vertices) {
+    V = vertices;
+
+    // Allocate memory for adjacency matrix
+    adj = new int*[V];
+    for (int i = 0; i < V; ++i)
+        adj[i] = new int[V];
+
+    // Initialize the matrix with zeros
+    for (int i = 0; i < V; ++i)
+        for (int j = 0; j < V; ++j)
+            adj[i][j] = 0;
+}
+
+Graph::~Graph() {
+    // Deallocate memory
+    for (int i = 0; i < V; ++i)
+        delete[] adj[i];
+    delete[] adj;
+}
+
+void Graph::addEdge(int v, int w) {
+    // Add w to v’s list.
+    adj[v][w] = 1;
+}
+
+void Graph::BFS(int s) {
+    // Mark all the vertices as not visited
+    bool* visited = new bool[V];
+    for (int i = 0; i < V; ++i)
+        visited[i] = false;
+
+    // Create a queue for BFS
+    std::queue<int> queue;
+
+    // Mark the current node as visited and enqueue it
+    visited[s] = true;
+    queue.push(s);
+
+    while (!queue.empty()) {
+        // Dequeue a vertex from queue and print it
+        s = queue.front();
+        std::cout << s << " ";
+        queue.pop();
+
+        // Get all adjacent vertices of the dequeued vertex s.
+        // If an adjacent has not been visited, then mark it visited and enqueue it
+        for (int i = 0; i < V; ++i) {
+            if (adj[s][i] && !visited[i]) {
+                visited[i] = true;
+                queue.push(i);
+            }
+        }
+    }
+
+    // Deallocate memory
+    delete[] visited;
+}
+
+int main() {
+    // Take input for the number of vertices
+    int vertices;
+    std::cout << "Enter the number of vertices: ";
+    std::cin >> vertices;
+
+    // Create a graph with the given number of vertices
+    Graph g(vertices);
+
+    // Take input for edges
+    int edges;
+    std::cout << "Enter the number of edges: ";
+    std::cin >> edges;
+
+    std::cout << "Enter the edges (format: v w): \n";
+    for (int i = 0; i < edges; ++i) {
+        int v, w;
+        std::cin >> v >> w;
+        g.addEdge(v, w);
+    }
+
+    // Take input for the starting vertex for BFS
+    int startVertex;
+    std::cout << "Enter the starting vertex for BFS: ";
+    std::cin >> startVertex;
+
+    std::cout << "Following is Breadth First Traversal\n";
+    g.BFS(startVertex);
+
+    return 0;
+}

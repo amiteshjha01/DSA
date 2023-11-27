@@ -1,0 +1,60 @@
+#include <iostream>
+#include <map>
+#include <list>
+
+using namespace std;
+
+class Graph {
+public:
+    map<int, bool> visited;
+    map<int, list<int> > adj;
+
+    void addEdge(int v, int w);
+    void DFS(int v);
+};
+
+void Graph::addEdge(int v, int w) {
+    // Add w to v’s list.
+    adj[v].push_back(w);
+}
+
+void Graph::DFS(int v) {
+    // Mark the current node as visited and print it
+    visited[v] = true;
+    cout << v << " ";
+
+    // Recur for all the vertices adjacent to this vertex
+    list<int>::iterator i;
+    for (i = adj[v].begin(); i != adj[v].end(); ++i)
+        if (!visited[*i])
+            DFS(*i);
+}
+
+int main() {
+    Graph g;
+
+    // Input the edges from the user
+    int numEdges;
+    cout << "Enter the number of edges: ";
+    cin >> numEdges;
+
+    cout << "Enter the edges (format: vertex1 vertex2):" << endl;
+    for (int i = 0; i < numEdges; ++i) {
+        int v, w;
+        cin >> v >> w;
+        g.addEdge(v, w);
+    }
+
+    // Input the starting vertex for DFS
+    int startVertex;
+    cout << "Enter the starting vertex for DFS: ";
+    cin >> startVertex;
+
+    cout << "Depth First Traversal starting from vertex " << startVertex << ":\n";
+
+    // Function call
+    g.DFS(startVertex);
+
+    return 0;
+}
+ 

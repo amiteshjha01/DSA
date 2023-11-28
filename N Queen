@@ -1,0 +1,103 @@
+#include <iostream>
+using namespace std;
+
+class NQueens {
+private:
+    int N;
+    int **board;
+
+public:
+    NQueens(int n) : N(n) {
+        // Dynamically allocate memory for the board
+        board = new int*[N];
+        for (int i = 0; i < N; i++) {
+            board[i] = new int[N];
+            for (int j = 0; j < N; j++) {
+                board[i][j] = 0;
+            }
+        }
+    }
+
+    ~NQueens() {
+        // Deallocate memory for the board
+        for (int i = 0; i < N; i++) {
+            delete[] board[i];
+        }
+        delete[] board;
+    }
+
+    // A utility function to print the solution
+    void printSolution() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (board[i][j])
+                    cout << "Q ";
+                else
+                    cout << ". ";
+            }
+            cout << "\n";
+        }
+    }
+
+    // A utility function to check if a queen can
+    // be placed on board[row][col].
+    bool isSafe(int row, int col) {
+        for (int i = 0; i < col; i++) {
+            if (board[row][i])
+                return false;
+        }
+
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j])
+                return false;
+        }
+
+        for (int i = row, j = col; j >= 0 && i < N; i++, j--) {
+            if (board[i][j])
+                return false;
+        }
+
+        return true;
+    }
+
+    // A recursive utility function to solve N Queen problem
+    bool solveNQUtil(int col) {
+        if (col >= N)
+            return true;
+
+        for (int i = 0; i < N; i++) {
+            if (isSafe(i, col)) {
+                board[i][col] = 1;
+
+                if (solveNQUtil(col + 1))
+                    return true;
+
+                board[i][col] = 0; // BACKTRACK
+            }
+        }
+
+        return false;
+    }
+
+    // Function to solve the N Queen problem using backtracking
+    bool solveNQ() {
+        if (solveNQUtil(0) == false) {
+            cout << "Solution does not exist";
+            return false;
+        }
+
+        printSolution();
+        return true;
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter the number of queens (N): ";
+    cin >> n;
+
+    NQueens queens(n);
+    queens.solveNQ();
+
+    return 0;
+}
